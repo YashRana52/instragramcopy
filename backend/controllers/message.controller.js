@@ -1,16 +1,17 @@
 import { Conversation } from '../models/conversation.model.js';
 import { Message } from '../models/message.model.js';
+import { getReceiverSocketId, io } from '../socket/socket.js'; // Ensure io is imported
 
 export const sendMessage = async (req, res) => {
   try {
     const senderId = req.id;
-    const receiverId = req.params.id; 
-    const { message } = req.body;
+    const receiverId = req.params.id;
+    const { textMessage: message } = req.body;
 
     // Check if a conversation exists
     let conversation = await Conversation.findOne({
       participants: { $all: [senderId, receiverId] },
-    });
+    }).populate('messages')
 
     // Create a new conversation if not found
     if (!conversation) {
@@ -30,11 +31,14 @@ export const sendMessage = async (req, res) => {
     // Add the message to the conversation
     conversation.messages.push(newMessage._id);
 
-    // Save both conversation and message
-    await Promise.all([conversation.save(), newMessage.save()]);
+    // Save the conversation
+    await conversation.save();
 
-    // Placeholder for Socket.io implementation
-    
+    // Emit message via Socket.io if receiver is online
+    const receiverSocketId = getReceiverSocketId(receiverId);
+    if (receiverSocketId) {
+      io.to(receiverSocketId).emit('newMessage', newMessage);
+    }
 
     // Send success response
     return res.status(201).json({
@@ -59,7 +63,8 @@ export const getMessage = async (req, res) => {
     // Find the conversation
     const conversation = await Conversation.findOne({
       participants: { $all: [senderId, receiverId] },
-    }).populate('messages'); 
+    }).populate('messages');
+
     if (!conversation) {
       return res.status(200).json({
         success: true,
