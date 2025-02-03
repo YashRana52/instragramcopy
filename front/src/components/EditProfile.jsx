@@ -49,7 +49,7 @@ function EditProfile() {
                 formData.append('profilePhoto', input.profilePhoto);
             }
 
-            const res = await axios.post('http://localhost:5000/api/v1/user/profile/edit', formData, {
+            const res = await axios.post('https://instragramcopy.onrender.com/api/v1/user/profile/edit', formData, {
                 headers: { 'Content-Type': 'multipart/form-data' },
                 withCredentials: true
             });

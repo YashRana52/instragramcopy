@@ -58,7 +58,7 @@ function CommentDialog({ open, setOpen }) {
     try {
       // Send new comment to backend
       const res = await axios.post(
-        `http://localhost:5000/api/v1/post/${selectedPost?._id}/comment`,
+        `https://instragramcopy.onrender.com/api/v1/post/${selectedPost?._id}/comment`,
         { text: newComment },
         {
           headers: {
