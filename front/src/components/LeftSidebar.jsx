@@ -14,7 +14,7 @@ import { Button } from "./ui/button";
 function LeftSidebar() {
   const navigate = useNavigate();
   const { user } = useSelector((state) => state.auth);
-  const { likeNotification } = useSelector(store => store.realTimeNotification);
+  const { likeNotification } = useSelector((store) => store.realTimeNotification);
   const dispatch = useDispatch();
   const [open, setOpen] = useState(false);
 
@@ -22,11 +22,13 @@ function LeftSidebar() {
     if (!user) return;
 
     try {
-      const res = await axios.get("https://instragramcopy.onrender.com/api/v1/user/logout", { withCredentials: true });
+      const res = await axios.get("https://instragramcopy.onrender.com/api/v1/user/logout", {
+        withCredentials: true,
+      });
       if (res.data.success) {
         dispatch(setAuthUser(null));
-        dispatch(setSelectedPost(null))
-        dispatch(setPosts([]))
+        dispatch(setSelectedPost(null));
+        dispatch(setPosts([]));
         navigate("/login");
         toast.success(res.data.message);
       }
@@ -40,17 +42,13 @@ function LeftSidebar() {
       logoutHandler();
     } else if (textType === "Create") {
       setOpen(true);
+    } else if (textType === "Profile") {
+      navigate(`/profile/${user?._id}`);
+    } else if (textType === "Home") {
+      navigate("/");
+    } else if (textType === "Messages") {
+      navigate("chat");
     }
-    else if (textType === "Profile") {
-      navigate(`/profile/${user?._id}`)
-    }
-    else if (textType === "Home") {
-      navigate('/')
-    }
-    else if (textType === "Messages") {
-      navigate('chat')
-    }
-
   };
 
   const sidebarItems = [
@@ -86,49 +84,55 @@ function LeftSidebar() {
           <div
             onClick={() => sidebarHandler(item.text)}
             key={item.id}
-            className="flex items-center gap-5 hover:bg-gray-200 cursor-pointer rounded-lg px-6 py-4 w-full transition-all"
+            className="relative flex items-center gap-5 hover:bg-gray-200 cursor-pointer rounded-lg px-6 py-4 w-full transition-all"
           >
-            {item.icon}
-            <span className="text-lg font-semibold">{item.text}</span>
-            {
-              item.text === 'Notifications' && likeNotification.length > 0 && (
-
-                <Popover>
-                  <PopoverTrigger asChild>
-
-                    <Button size='icon' className='rounded-full h-5 w-5 bg-red-500 hover:bg-red-500 absolute bottom-5 left-6'>{likeNotification.length}
-
-                    </Button>
-
-
-                  </PopoverTrigger>
-                  <PopoverContent>
-                    <div>
-                      {
-                        likeNotification.length === 0 ? (<p>No new notification</p>) : (
-                          likeNotification.map((notification) => {
-                            return (
-                              <div key={notification.userId} className='flex items-center gap-2 my-2'>
-                                <Avatar>
-                                  <AvatarImage src={notification.userDetails?.profilePicture} />
-                                  <AvatarFallback>CN</AvatarFallback>
-                                </Avatar>
-                                <p className='text-sm'><span className='font-bold'>{notification.userDetails?.username}</span> liked your post</p>
-                              </div>
-                            )
-                          })
-                        )
-                      }
-                    </div>
-                  </PopoverContent>
-                </Popover>
-
-              )
-            }
+            {/* Notifications Popover */}
+            {item.text === "Notifications" ? (
+              <Popover>
+                <PopoverTrigger asChild>
+                  <div className="relative">
+                    {item.icon}
+                    {likeNotification.length > 0 && (
+                      <Button
+                        size="icon"
+                        className="absolute -top-2 -right-2 rounded-full h-5 w-5 bg-red-500 hover:bg-red-500 text-xs"
+                      >
+                        {likeNotification.length}
+                      </Button>
+                    )}
+                  </div>
+                </PopoverTrigger>
+                <PopoverContent className="w-64">
+                  <div className="p-2">
+                    {likeNotification.length === 0 ? (
+                      <p className="text-center text-sm">No new notifications</p>
+                    ) : (
+                      likeNotification.map((notification) => (
+                        <div key={notification.userId} className="flex items-center gap-2 my-2">
+                          <Avatar>
+                            <AvatarImage src={notification.userDetails?.profilePicture} />
+                            <AvatarFallback>CN</AvatarFallback>
+                          </Avatar>
+                          <p className="text-sm">
+                            <span className="font-bold">{notification.userDetails?.username}</span>{" "}
+                            liked your post
+                          </p>
+                        </div>
+                      ))
+                    )}
+                  </div>
+                </PopoverContent>
+              </Popover>
+            ) : (
+              <>
+                {item.icon}
+                <span className="text-lg font-semibold">{item.text}</span>
+              </>
+            )}
           </div>
         ))}
-
       </nav>
+
       <CreatePost open={open} setOpen={setOpen} />
     </div>
   );
