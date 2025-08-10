@@ -15,7 +15,7 @@ A full-stack **Social Media Application** built using the MERN Stack (MongoDB, E
 
 | 🏠 Home Page | 👤 Profile Pagee | ➕ Create Post | 
 |-------------|--------------------|-----------------|
-| ![Home](./screenshots/home.png) | ![ Profile](./screenshots/profile.png) | ![Create Post](./screenshots/booking.png) | 
+| ![Home](./screenshots/home.png) | ![ Profile](./screenshots/profile.png) | ![Create Post](./screenshots/post.png) | 
 
 ---
 
