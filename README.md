@@ -7,7 +7,7 @@ A full-stack **Social Media Application** built using the MERN Stack (MongoDB, E
 
 ## 🚀 Live Demo
 
-🔗 [View Live](https://car-booking-client-brown.vercel.app)
+🔗 [View Live](https://instragramcopy.onrender.com)
 
 ---
 
