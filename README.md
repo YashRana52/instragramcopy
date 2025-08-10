@@ -19,9 +19,10 @@ A full-stack **Social Media Application** built using the MERN Stack (MongoDB, E
 
 
 
-| 🏠 chat Page | 👤 Post Page | ➕ Comments Page | 
-|-------------|--------------------|-----------------|
-| ![Home](./screenshots/chat.png) | ![ Profile](./screenshots/post2.png) | ![Create Post](./screenshots/commnet.png) | 
+| 💬 Chat Page | 🖼️ Post Page | 💭 Comments Page | 
+|--------------|--------------|-----------------|
+| ![Home](./screenshots/chat.png) | ![ Profile](./screenshots/post2.png) | ![Create Post](./screenshots/commnet.png) |
+
 
 ---
 
